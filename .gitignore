@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# AFM data and generated results (keep local)
+Data/**
+!Data/.gitkeep
+!Data/README.md
+Output/
+*.ibw
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
