@@ -6,12 +6,17 @@ __pycache__/
 venv/
 .env
 
-# AFM data and generated results (keep local)
-Data/**
-!Data/.gitkeep
-!Data/README.md
-Output/
+# AFM scans and generated results (keep local)
 *.ibw
+Output/
+
+# Track Data/ notes and templates; ignore everything else in Data/
+Data/**
+!Data/README.md
+!Data/.gitkeep
+!Data/**/
+!Data/**/README.md
+!Data/**/baseline.txt
 
 # OS / editor
 .DS_Store

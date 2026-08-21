@@ -108,35 +108,38 @@ py -3.10 main.py
 
 ## Data layout and naming
 
-Each **subfolder** of `Data/` is one comparison experiment. Files in several folders may be duplicates — that is intentional. Loose `.ibw` files directly in `Data/` are processed as experiment `unnamed`.
+Full walkthrough: **[Data/README.md](Data/README.md)**. Copy-me template: **[Data/_template_glass_vs_ito/](Data/_template_glass_vs_ito/)**.
+
+**One subfolder = one experiment.** Files in the same folder are compared with each other. Folders whose names start with `_` are templates and are skipped.
 
 ```
 Data/
-├── glass_vs_glass_ito/
-│   ├── Glass_0001.ibw
-│   ├── Glass_0002.ibw
-│   ├── Glass_ITO_0001.ibw
-│   └── Glass_ITO_0002.ibw
-├── glass_vs_si/
-│   ├── Glass_0001.ibw
-│   └── Si_0001.ibw
-└── quartz_bare/
-    └── Quartz_0001.ibw
+├── README.md
+├── _template_glass_vs_ito/     ← copy this, then rename (drop the _)
+├── new_device/                 ← a real experiment
+│   ├── Sample_0001.ibw
+│   └── Sample_0002.ibw
+└── glass_vs_glass_ito/         ← another experiment (not mixed with new_device)
+    ├── Glass_0001.ibw
+    ├── Glass_0002.ibw
+    ├── Glass_ITO_0001.ibw
+    └── Glass_ITO_0002.ibw
 ```
 
-**Naming convention** (trailing replicate numbers are stripped automatically via `REPLICATE_STRIP_PATTERN`):
+**Filename recipe:** `Substrate_Layer_0001.ibw`
 
-| Role | Filename example | `base_sample_name` | Parsed as |
-|------|------------------|--------------------|-----------|
-| Bare substrate | `Glass_0001.ibw` | `Glass` | baseline |
-| With coating | `Glass_ITO_0001.ibw` | `Glass_ITO` | deposit on `Glass` |
-| PMMA on Si | `Si_PMMA_0001.ibw` | `Si_PMMA` | deposit on `Si` |
+| File on disk | Sample group | Role |
+|--------------|--------------|------|
+| `Glass_0001.ibw` | `Glass` | bare substrate (baseline) |
+| `Glass_ITO_0001.ibw` | `Glass_ITO` | ITO coating on `Glass` |
+| `Si_PMMA_0001.ibw` | `Si_PMMA` | PMMA on silicon |
+| `Sample_0001.ibw` | `Sample` | single-sample experiment |
 
-Use `_` to separate substrate from deposited layer (`Glass_ITO`, `Glass_PMMA`, `Si_ITO`). The substrate token is whatever comes before the first underscore (`Glass`, `Quartz`, `Si`, …).
+Always put a `_` before the replicate number (`Sample_0001`, not `Sample0001`). When you run the analyser it prints this map before processing.
 
-**Optional baseline override:** if auto-pairing is ambiguous, add a one-line `baseline.txt` in the comparison folder containing the exact `base_sample_name` of the reference scan (e.g. `Glass`).
+**Optional:** a one-line `baseline.txt` in the experiment folder (e.g. `Glass`) if auto-pairing is ambiguous.
 
-Raw `.ibw` files are gitignored and are not committed to this repository.
+Raw `.ibw` files stay local and are gitignored.
 
 ---
 
@@ -449,7 +452,10 @@ afm-3d-holes-protrusion/
 ├── comparison.py            # Cross-sample Plotly figures
 ├── substrate_comparison.py  # Substrate vs coating pairing
 ├── requirements.txt
-├── Data/                    # Place .ibw files here (gitignored)
+├── Data/
+│   ├── README.md            # How experiments are organised
+│   ├── _template_glass_vs_ito/  # Copy-me folder (skipped at run time)
+│   └── new_device/          # Example real experiment — drop .ibw files here
 └── Output/                  # Timestamped runs (gitignored, created on first run)
 ```
 
